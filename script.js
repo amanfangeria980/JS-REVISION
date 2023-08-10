@@ -1151,6 +1151,245 @@ console.log(objectFormat)
 //4 functional automatically return {object}
 
 
+let Car=function(color,model){
+    //instance properties
+    console.log(this);
+    this.color=color;
+    this.model=model;
+    //not a good practice
+    //method example, alternatively as a good practice, we can use prototypes for this
+    this.login=function(){
+        console.log("login method");
+    }
+    // example of prototype 
+}
+
+let instanceOfCar=new Car("Black","2003");
+console.log(result);
+console.log(instanceOfCar instanceof Car);
+
+// Prototypes
+// Each object created by constructor function have an access to all methods present inside that constructor prototype 
+console.log(Car.prototype); //a constructor function is being printed, currently empty
+
+// for example 
+Car.prototype.startEngine = function(){
+    console.log("Engine is started"); 
+}
+
+console.log(Car.prototype); // start engine is now available inside this;
+
+// let's call it
+instanceOfCar.startEngine();
+console.log(instanceOfCar.__proto__); //if we want to check the prototype from which the object is made
+
+
+//we can also set properties to prototype
+Car.prototype.company= "Honda"; // Iska matlab ab jitne bhi naye objects banenge unke andar bhi yeh property accessible rahegi
+
+// for example 
+const instance2=new Car("White","2004");
+console.log(instance2.company); //This is called prototypical inheritance
+
+console.log(instance2.__proto__);
+// It is same as this, hence is called prototypical inheritance
+console.log(Car.prototype)
+var exArr=[1,23,4];
+console.log(exArr.__proto__,Array.prototype);
+console.log(Object.prototype) //last level of prototype before getting null
+
+
+// ES6 Classes
+// They still implement prototypal inheritance behind the scenes but it's a new way introduced in ES6, above was the traditional way of creating class and object in js 
+
+// Class declaration
+class Bus{
+    constructor(color,model){
+        this.color=color;
+        this.model=model;
+    }
+
+    startEngine(){
+        console.log("Started Engine")
+    }
+
+    get startBus(){
+        console.log("This is start bus method using get");
+    }
+
+    set changeColor(color){
+        console.log(this.color=color);
+    }
+
+    get description(){
+        return `Color of Bike is ${this.color}`;
+    }
+}
+
+let redBus=new Bus("Red",2003);
+console.log(redBus);
+redBus.startEngine(); //accessing as function
+
+
+// Classes are not hoisted
+// Classes are also first class citizens (Pass as an argument or return)
+// Classes are executed in strict mode
+
+//Setters and Getters method
+// it allows you to define object accessors (Computed Properties)
 
 
 
+//We can also use in class as in line number 1216 and 1220
+//Using it
+redBus.startBus; //accessing as property
+redBus.changeColor="blue";
+//color is changed in original object
+console.log(redBus);
+
+console.log(redBus.description)
+
+
+//static methods (method which is not present in constructor)
+
+//static method example
+Car.breakMethod=function(){
+    console.log("Break method of car");
+}
+
+Car.breakMethod();
+
+
+// Class Inheritance
+
+//let's assume parent class as Bus which we declared above
+
+
+// Child Class
+class Bike extends Bus {
+    //Adding some new properties and "methods" as well
+    constructor(color,model,engineCap){
+        super(color,model); //calling parent constructor
+        this.engineCap=engineCap;
+    }
+}
+
+// let newBike=new Bike("Aqua",2000);
+// console.log(newBike);
+
+
+let newBike=new Bike("Aqua",2000,100);
+console.log(newBike);
+ 
+
+// If we want to chain various methods just return this in every function end and we can chain those methods.
+
+
+// Asynchronous JavaScript
+
+// Async Code Example
+
+console.log(1);
+console.log(2);
+
+/* setTimeout(()=>{
+    console.log("Call Back after 3 seconds")
+},3000); //after 3 second
+ */
+console.log(3);
+console.log(4);
+
+
+// Making HTTP Request (AJAX example)
+
+// let request1=new XMLHttpRequest();
+// console.log(request1)
+
+// request1.addEventListener('readystatechange',()=>{
+    // console.log(request1,request1.readyState);
+//     if(request1.readyState===4 && request1.status==200){
+//         console.log(request1.responseText);
+//     }
+// })
+
+//set up the request
+// request1.open("Get","https://jsonplaceholder.typicode.com/todos/1");
+
+
+
+// sending the request
+// request1.send();
+
+
+// HTTP Response status codes
+
+// Informational responses (100-199)
+// Successful responses (200-299)
+// Redirection messages (300-399)
+// Client error responses (400-499)
+// Server error responses (500-599)
+
+
+// Callback function
+
+let todos=(callback  )=>{
+    let request=new XMLHttpRequest();
+    request.addEventListener('readystatechange',()=>{
+        if(request.readyState===4 && request.status==200){
+            // console.log(request,request.responseText);
+            let data=JSON.parse(request.responseText)
+            callback(undefined,data);
+        }
+        else if(request.readyState===4){
+            // console.log("Data could not be fetched");
+            callback("data could not be fetched",undefined);
+        }
+    })
+
+    request.open("Get","https://jsonplaceholder.typicode.com/todos/1");
+    request.send();
+}
+
+//Async code example
+todos((err,data)=>{ //will take time
+    if(err){
+        console.log(err);
+    }
+    else{
+        console.log(data);
+    }
+});
+
+
+// Callback Hell (Chain of callback function inside one another)
+
+
+// Promise is a solution for this
+
+// General example
+
+let getSomething=()=>{
+    return new Promise((resolve,reject)=>{
+        resolve("Some data");
+        reject("some error");
+    })
+}
+
+getSomething().then((data)=>{
+    console.log(data);
+}).catch((error)=>{
+    console.log(error);
+})
+
+// Chaining of promises
+
+// Fetch API(it bydefault returns a promise)
+
+fetch("data.json").then((response)=>{
+    console.log("Promise resolved",response);
+}).catch((error)=>{
+    console.log("Some error")
+})
+
+
+// Async and Await
